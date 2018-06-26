@@ -10,7 +10,8 @@ convert.addEventListener("click", ()=> {
     fetch(`https://free.currencyconverterapi.com/api/v5/convert?q=${queryCodes}&compact=ultra`).then(responds => {
         return responds.json();
     }).then(query => {
-        converted.setAttribute("value", `${toConvert.value * query[queryCodes]}`);
+        let total = toConvert.value * query[queryCodes];
+        converted.setAttribute("value", `${Math.round(total * 100) / 100}`);
         console.log(query);
     })
 })
