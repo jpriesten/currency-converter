@@ -1,4 +1,3 @@
-console.log("I can convert now");
 let toConvert = document.getElementById("toConvert");
 let converted = document.getElementById("converted");
 let convert = document.getElementById("convert");

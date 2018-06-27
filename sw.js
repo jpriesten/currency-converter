@@ -26,7 +26,25 @@ self.addEventListener("fetch", (event) => {
 
     event.respondWith(
         caches.match(event.request).then(response => {
-            return response || fetch(event.request);
+            if(response) return response;
+
+            // cloning the fetch request
+            let fetchRequest = event.request.clone();
+            return fetch(fetchRequest).then(response => {
+                // check is the response received is valid
+                if(!response || response.status !== 200){
+                    return response;
+                }
+
+                // cloning the response before putting in cache
+                let responseToCache = response.clone();
+                // Opening the cache and putting the request and response to the cache array
+                caches.open(Cache_Name).then(cache => {
+                    cache.put(event.request, responseToCache);
+                });
+                console.log("Request/Response pair added");
+                return response;
+            });
         })
     );
 })
