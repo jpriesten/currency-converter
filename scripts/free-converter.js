@@ -2,8 +2,9 @@
 let toConvert = document.getElementById("toConvert");
 let converted = document.getElementById("converted");
 let convert = document.getElementById("convert");
-let toSelect = document.getElementById("inputGroupSelect02");
-let fromSelect = document.getElementById("inputGroupSelect01");
+let toSelect = document.getElementById("toSelect");
+let fromSelect = document.getElementById("fromSelect");
+let symbol = document.getElementById("symbol");
 
 //Two things should happen when a user clicks on the convert button
 // 1) The conversion calculation should take place and should populate the result field.
@@ -11,11 +12,34 @@ let fromSelect = document.getElementById("inputGroupSelect01");
 //      query_id and the conversion_rate
 convert.addEventListener("click", ()=> {
     let queryCodes = `${fromSelect.value}_${toSelect.value}`;
+
+    function conversion(convertValue, convertRate){
+        let total = convertValue * convertRate;
+        converted.setAttribute("value", `${Math.round(total * 100) / 100}`);
+        symbol.innerHTML = toSelect.value;
+    }
+
+    openDatabase().then( db => {
+        if (!db) return;
+
+        let tx = db.transaction('currency_rates', 'readwrite');
+        let store = tx.objectStore('currency_rates'); 
+        store.getAll().then( currencyRates => {
+            if(currencyRates.length === 0) return;
+
+            currencyRates.forEach( currencyRate => {
+                if(currencyRate.id === queryCodes){
+                    conversion(toConvert.value, currencyRate);
+                    return;
+                }
+            });
+        });       
+    });
+
     fetch(`https://free.currencyconverterapi.com/api/v5/convert?q=${queryCodes}&compact=ultra`).then(responds => {
         return responds.json();
     }).then(query => {
-        let total = toConvert.value * query[queryCodes];
-        converted.setAttribute("value", `${Math.round(total * 100) / 100}`);
+        conversion(toConvert.value, query[queryCodes]); 
         console.log(query);
         return query;
     }).then( query => {

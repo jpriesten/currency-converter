@@ -34,7 +34,7 @@ self.addEventListener('activate', event => {
         })
     );
 });
-
+ 
 self.addEventListener("fetch", (event) => {
     let requestURL = new URL(event.request.url);
 
