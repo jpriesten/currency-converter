@@ -1,10 +1,10 @@
-
-let toConvert = document.getElementById("toConvert");
-let converted = document.getElementById("converted");
-let convert = document.getElementById("convert");
-let toSelect = document.getElementById("toSelect");
-let fromSelect = document.getElementById("fromSelect");
-let symbol = document.getElementById("symbol");
+//Defining global constant variables
+const toConvert = document.getElementById("toConvert");
+const converted = document.getElementById("converted");
+const convert = document.getElementById("convert");
+const toSelect = document.getElementById("toSelect");
+const fromSelect = document.getElementById("fromSelect");
+const symbol = document.getElementById("symbol");
 
 //Two things should happen when a user clicks on the convert button
 // 1) The conversion calculation should take place and should populate the result field.
@@ -19,6 +19,7 @@ convert.addEventListener("click", ()=> {
         symbol.innerHTML = toSelect.value;
     }
 
+    // When offline, fetch the conversion rates from database and use to calculate the conversion
     openDatabase().then( db => {
         if (!db) return;
 
@@ -29,8 +30,7 @@ convert.addEventListener("click", ()=> {
 
             currencyRates.forEach( currencyRate => {
                 if(currencyRate.id === queryCodes){
-                    conversion(toConvert.value, currencyRate);
-                    return;
+                    return conversion(toConvert.value, currencyRate.value);
                 }
             });
         });       
@@ -40,7 +40,7 @@ convert.addEventListener("click", ()=> {
         return responds.json();
     }).then(query => {
         conversion(toConvert.value, query[queryCodes]); 
-        console.log(query);
+
         return query;
     }).then( query => {
         openDatabase().then( db => {
@@ -54,13 +54,33 @@ convert.addEventListener("click", ()=> {
     });
 });
 
+// This event fires up when the page loads. It collects all currency from API and puts in database 
+// to enable offline functionality 
 self.addEventListener('load', () => {
-    const url = fetch(`https://free.currencyconverterapi.com/api/v5/currencies`);
-    url.then(responds => {
+
+    fromSelect.innerHTML = "" , toSelect.innerHTML = "";
+
+    // When offline, fetch currency data from database and populate the select boxes
+    openDatabase().then( db => {
+        if (!db) return;
+
+        let tx = db.transaction('country_currency', 'readwrite');
+        let store = tx.objectStore('country_currency'); 
+        store.getAll().then( currencyCodes => {
+            if(currencyCodes.length === 0) return;
+
+            currencyCodes.forEach( currencyCode => {
+                fromSelect.innerHTML += `<option value="${currencyCode.id}">${currencyCode.id}(${currencyCode.currencyName})</option>`;
+                toSelect.innerHTML += `<option value="${currencyCode.id}">${currencyCode.id}(${currencyCode.currencyName})</option>`;
+            });
+        });       
+    });
+
+    // If request is not found in the database, fetch from the network and save in database
+    fetch(`https://free.currencyconverterapi.com/api/v5/currencies`).then(responds => {
         return responds.json();
     }).then(data => {
-        let results = data.results
-        fromSelect.innerHTML = "" , toSelect.innerHTML = "";
+        let results = data.results;
 
         for( const currency in results ){
             fromSelect.innerHTML += `<option value="${results[currency].id}">${results[currency].id}(${results[currency].currencyName})</option>`;
@@ -91,8 +111,7 @@ self.addEventListener('load', openDatabase = () => {
     }
 
     return idb.open('convert', 1, (upgradeDb) => {
-        const rates_Store = upgradeDb.createObjectStore('currency_rates', {keyPath: 'id', autoIncrement: true});
-        rates_Store.createIndex('by-date', 'time');
-        return upgradeDb.createObjectStore('country_currency', {keyPath: 'id', autoIncrement: true});
+        upgradeDb.createObjectStore('currency_rates', {keyPath: 'id', autoIncrement: true});
+        upgradeDb.createObjectStore('country_currency', {keyPath: 'id', autoIncrement: true});
     });
 });

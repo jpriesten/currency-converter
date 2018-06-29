@@ -34,14 +34,13 @@ self.addEventListener('activate', event => {
         })
     );
 });
- 
+
 self.addEventListener("fetch", (event) => {
     let requestURL = new URL(event.request.url);
 
-    // if(requestURL.pathname.startsWith('/api/v5/convert')){
-    //     event.respondWith(conversionRates_cache(event.request));
-    //     return;
-    // } 
+    if(requestURL.pathname.startsWith('/api/v5/convert')) return;
+    
+    if(requestURL.pathname.startsWith('/api/v5/currencies')) return;
  
     event.respondWith(
         caches.match(event.request).then(response => {
