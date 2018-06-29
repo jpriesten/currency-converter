@@ -1,8 +1,12 @@
-let Cache_Name = 'currency-converter-v1';
+const Cache_Name = 'currency-converter-v1';
+const Cache_Conversion_Rate = 'conversion-rate';
+const All_Caches = [
+    Cache_Name,
+    Cache_Conversion_Rate
+];
 let URLsToCache = [
     '/index.html',
     'scripts/free-converter.js',
-    'https://free.currencyconverterapi.com/api/v5/currencies',
     'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css'
 ];
 
@@ -11,19 +15,34 @@ self.addEventListener("install", (event) => {
     event.waitUntil(
         caches.open(Cache_Name).then(cache => {
             console.log("Cache opened");
+            self.skipWaiting();
             return cache.addAll(URLsToCache); 
         })
     );
 }) 
+ 
+self.addEventListener('activate', event => {
+    event.waitUntil(
+        caches.keys().then( cacheNames => {
+            return Promise.all(
+                cacheNames.map( cacheName => {
+                    if(All_Caches.indexOf(cacheName) === -1) {
+                        return caches.delete(cacheName);
+                    }
+                })
+            );
+        })
+    );
+});
 
 self.addEventListener("fetch", (event) => {
     let requestURL = new URL(event.request.url);
 
-    if(requestURL.pathname.startsWith('/api/v5/convert')){
-        event.respondWith(conversionRates_cache(event.request));
-        return;
-    }
-
+    // if(requestURL.pathname.startsWith('/api/v5/convert')){
+    //     event.respondWith(conversionRates_cache(event.request));
+    //     return;
+    // } 
+ 
     event.respondWith(
         caches.match(event.request).then(response => {
             if(response) return response;
@@ -47,5 +66,24 @@ self.addEventListener("fetch", (event) => {
             });
         })
     );
-})
+}) 
+
+function conversionRates_cache(request) {
+    return caches.open(Cache_Conversion_Rate).then( cache => {
+        cache.match(request).then( response => {
+            let netResponse = fetch(request).then( networkResponse => {
+                cache.put(request, networkResponse.clone());
+                return networkResponse;
+            });
+            return response || netResponse;
+        });
+    });
+}
+
+// Handle the event where the service worker needs to skipWaiting 
+self.addEventListener('load', function(event) {
+    if (event.data.action === 'skipWaiting') {
+      self.skipWaiting();
+    }
+  });
 
