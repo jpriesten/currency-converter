@@ -1,4 +1,4 @@
-const Cache_Name = 'currency-converter-v1';
+const Cache_Name = 'currency-converter-v3';
 const Cache_Conversion_Rate = 'conversion-rate';
 const All_Caches = [
     Cache_Name,
@@ -9,7 +9,7 @@ let URLsToCache = [
     'scripts/free-converter.js',
     'style/bootstrap.min.css'
 ];
- 
+
 self.addEventListener("install", (event) => {
     //Begin installing the service worker
     event.waitUntil(
@@ -66,18 +66,6 @@ self.addEventListener("fetch", (event) => {
         })
     );
 }) 
-
-function conversionRates_cache(request) {
-    return caches.open(Cache_Conversion_Rate).then( cache => {
-        cache.match(request).then( response => {
-            let netResponse = fetch(request).then( networkResponse => {
-                cache.put(request, networkResponse.clone());
-                return networkResponse;
-            });
-            return response || netResponse;
-        });
-    });
-}
 
 // Handle the event where the service worker needs to skipWaiting 
 self.addEventListener('load', function(event) {
