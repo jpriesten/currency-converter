@@ -7,7 +7,7 @@ const All_Caches = [
 let URLsToCache = [
     '/index.html',
     'scripts/free-converter.js',
-    'https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css'
+    'style/bootstrap.min.css'
 ];
  
 self.addEventListener("install", (event) => {
