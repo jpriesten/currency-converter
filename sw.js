@@ -7,9 +7,9 @@ const All_Caches = [
 let URLsToCache = [
     '/index.html',
     'scripts/free-converter.js',
-    'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css'
+    'https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css'
 ];
-
+ 
 self.addEventListener("install", (event) => {
     //Begin installing the service worker
     event.waitUntil(
@@ -20,7 +20,7 @@ self.addEventListener("install", (event) => {
         })
     );
 }) 
- 
+
 self.addEventListener('activate', event => {
     event.waitUntil(
         caches.keys().then( cacheNames => {
@@ -38,7 +38,7 @@ self.addEventListener('activate', event => {
 self.addEventListener("fetch", (event) => {
     let requestURL = new URL(event.request.url);
 
-    if(requestURL.pathname.startsWith('/api/v5/convert')) return;
+    if(requestURL.pathname.startsWith('/api/v5/convert')) return; 
     
     if(requestURL.pathname.startsWith('/api/v5/currencies')) return;
  
