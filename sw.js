@@ -1,4 +1,4 @@
-const Cache_Name = 'currency-converter-v10';
+const Cache_Name = 'currency-converter-v11';
 const All_Caches = [
     Cache_Name
 ];
