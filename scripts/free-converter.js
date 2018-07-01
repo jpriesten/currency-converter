@@ -59,9 +59,9 @@ convert.addEventListener("click", ()=> {
 // to enable offline functionality 
 self.addEventListener('load', () => {
 
-//     window.addEventListener('offline', () => {
-//         logError.innerHTML = `You are currently offline, go online to get the latest results`;
-//     });
+    window.addEventListener('offline', () => {
+        logError.innerHTML = `You are currently offline, go online to get the latest results`;
+    });
 
     fromSelect.innerHTML = "" , toSelect.innerHTML = "";
 
