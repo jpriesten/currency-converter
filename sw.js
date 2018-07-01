@@ -16,7 +16,9 @@ self.addEventListener("install", (event) => {
         caches.open(Cache_Name).then(cache => {
             console.log("Cache opened");
             self.skipWaiting();
-            return cache.addAll(URLsToCache); 
+            cache.addAll(URLsToCache); 
+            console.log("Static content added");
+            return;
         })
     );
 }); 
