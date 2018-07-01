@@ -70,8 +70,9 @@ self.addEventListener('load', () => {
         if (!db) return;
 
         let tx = db.transaction('country_currency', 'readwrite');
-        let store = tx.objectStore('country_currency'); 
-        store.getAll().then( currencyCodes => {
+        let store = tx.objectStore('country_currency');
+        let currencyNameIndex = store.index('CurrencyName'); 
+        currencyNameIndex.getAll().then( currencyCodes => {
             if(currencyCodes.length === 0) return;
 
             currencyCodes.forEach( currencyCode => {
@@ -115,8 +116,14 @@ self.addEventListener('load', openDatabase = () => {
         return Promise.resolve();
     }
 
-    return idb.open('convert', 1, (upgradeDb) => {
-        upgradeDb.createObjectStore('currency_rates', {keyPath: 'id', autoIncrement: true});
-        upgradeDb.createObjectStore('country_currency', {keyPath: 'id', autoIncrement: true});
+    return idb.open('convert', 2, (upgradeDb) => {
+        switch(upgradeDb.oldVersion) {
+            case 0:
+                upgradeDb.createObjectStore('currency_rates', {keyPath: 'id', autoIncrement: true});
+                upgradeDb.createObjectStore('country_currency', {keyPath: 'id', autoIncrement: true});
+            case 1:
+                let currencies = upgradeDb.transaction.objectStore('country_currency');
+                currencies.createIndex('CurrencyName', 'currencyName');
+        }
     });
 });

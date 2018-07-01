@@ -21,3 +21,28 @@ body {
     line-height: 155%;
     padding: 5% 25%;
 }
+
+@media(max-width:767px) {
+
+    .arrange_size{
+        text-align: center;
+        font-size: 32px;
+    }
+
+}
+
+@media (max-width: 991.98px) { 
+
+    .arrange_size{
+        text-align: center;
+        font-size: 35px;
+    }
+    
+}
+
+@media (max-width: 575.98px) { 
+    .arrange_size{
+        text-align: center;
+        font-size: 30px;
+    }
+}

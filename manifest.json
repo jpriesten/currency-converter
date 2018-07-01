@@ -3,12 +3,12 @@
     "name": "Currency Converter",
     "icons": [
       {
-        "src": "images/button.png",
+        "src": "images/image.png",
         "type": "image/png",
         "sizes": "192x192"
       },
       {
-        "src": "images/button2.png",
+        "src": "images/images.png",
         "type": "image/png",
         "sizes": "512x512"
       }
