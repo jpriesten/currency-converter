@@ -1,8 +1,6 @@
-const Cache_Name = 'currency-converter-v6';
-const Cache_Conversion_Rate = 'conversion-rate';
+const Cache_Name = 'currency-converter-v10';
 const All_Caches = [
-    Cache_Name,
-    Cache_Conversion_Rate
+    Cache_Name
 ];
 let URLsToCache = [
     '/index.html',
@@ -72,7 +70,6 @@ self.addEventListener("fetch", (event) => {
 // Handle the event where the service worker needs to update
 self.addEventListener('message', function(event) {  
     if (event.data.action === 'skipWaiting') {
-        alert("Skipping");
         self.skipWaiting();
     }
 });
