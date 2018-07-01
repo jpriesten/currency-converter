@@ -15,7 +15,6 @@ self.addEventListener("install", (event) => {
     event.waitUntil(
         caches.open(Cache_Name).then(cache => {
             console.log("Cache opened");
-            self.skipWaiting();
             cache.addAll(URLsToCache); 
             console.log("Static content added");
             return;
@@ -68,11 +67,12 @@ self.addEventListener("fetch", (event) => {
         })
     );
 });  
-
-// Handle the event where the service worker needs to skipWaiting 
-self.addEventListener('load', function(event) {
+ 
+// Handle the event where the service worker needs to update
+self.addEventListener('message', function(event) {  
     if (event.data.action === 'skipWaiting') {
-      self.skipWaiting();
+        console.log("Skipping");
+        self.skipWaiting();
     }
-  });
+});
 
