@@ -30,7 +30,7 @@ self.addEventListener("load", () => {
     }
 
     // registering the service worker
-    navigator.serviceWorker.register('/sw.js').then(reg => {
+    navigator.serviceWorker.register('sw.js').then(reg => {
 
         if (!navigator.serviceWorker.controller) {
             return;
