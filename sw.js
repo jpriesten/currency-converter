@@ -1,4 +1,4 @@
-const Cache_Name = 'currency-converter-v1';
+const Cache_Name = 'currency-converter-v4';
 const Cache_Conversion_Rate = 'conversion-rate';
 const All_Caches = [
     Cache_Name,
@@ -18,9 +18,7 @@ self.addEventListener("install", (event) => {
             self.skipWaiting();
             return cache.addAll(URLsToCache); 
         })
-    ).cache( () => {
-        console.log("[Installation] Failed to open cache for service worker installation");
-    });
+    );
 }); 
 
 self.addEventListener('activate', event => {
@@ -34,9 +32,7 @@ self.addEventListener('activate', event => {
                 })
             );
         })
-    ).cache( () => {
-        console.log("[Activation] Failed to activate service worker");
-    });
+    );
 });
 
 self.addEventListener("fetch", (event) => {
@@ -68,9 +64,7 @@ self.addEventListener("fetch", (event) => {
                 return response;
             });
         })
-    ).cache( () => {
-        console.log("[Fetching] Failed to fetch resourses for service worker");
-    });
+    );
 }) 
 
 // Handle the event where the service worker needs to skipWaiting 
