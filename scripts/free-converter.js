@@ -112,7 +112,6 @@ self.addEventListener('load', openDatabase = () => {
 
     return idb.open('convert', 1, (upgradeDb) => {
         upgradeDb.createObjectStore('currency_rates', {keyPath: 'id', autoIncrement: true});
-        let currencies = upgradeDb.createObjectStore('country_currency', {keyPath: 'id', autoIncrement: true});
-        currencies.createIndex('code', 'id');
+        upgradeDb.createObjectStore('country_currency', {keyPath: 'id', autoIncrement: true});
     });
 });

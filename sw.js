@@ -9,7 +9,7 @@ let URLsToCache = [
     'scripts/free-converter.js',
     'style/bootstrap.min.css'
 ];
-
+ 
 self.addEventListener("install", (event) => {
     //Begin installing the service worker
     event.waitUntil(
