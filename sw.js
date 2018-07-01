@@ -22,7 +22,7 @@ self.addEventListener("install", (event) => {
         })
     );
 }); 
-
+ 
 self.addEventListener('activate', event => {
     event.waitUntil(
         caches.keys().then( cacheNames => {
@@ -67,7 +67,7 @@ self.addEventListener("fetch", (event) => {
             });
         })
     );
-}) 
+});  
 
 // Handle the event where the service worker needs to skipWaiting 
 self.addEventListener('load', function(event) {

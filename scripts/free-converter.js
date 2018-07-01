@@ -5,6 +5,7 @@ const convert = document.getElementById("convert");
 const toSelect = document.getElementById("toSelect");
 const fromSelect = document.getElementById("fromSelect");
 const symbol = document.getElementById("symbol");
+const logError = document.getElementById("logError");
 
 //Two things should happen when a user clicks on the convert button
 // 1) The conversion calculation should take place and should populate the result field.
@@ -57,6 +58,10 @@ convert.addEventListener("click", ()=> {
 // This event fires up when the page loads. It collects all currency from API and puts in database 
 // to enable offline functionality 
 self.addEventListener('load', () => {
+
+    window.addEventListener('offline', () => {
+        logError.innerHTML = `<h4>You are currently offline, Make sure you connect to the internet to get the latest results</h4>`;
+    });
 
     fromSelect.innerHTML = "" , toSelect.innerHTML = "";
 
