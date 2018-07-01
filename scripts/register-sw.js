@@ -18,16 +18,16 @@ self.addEventListener("load", () => {
         }
     });
 
-    let updateReady = (worker) => {
+    function updateReady(worker){
         worker.postMessage({action: 'skipWaiting'});
-    };
-    let trackInstalling = (worker) => {
+    }
+    function trackInstalling(worker){
         worker.addEventListener('statechange', () => {
             if(worker.state == 'installed'){
                 updateReady(worker);
             }
         });
-    };
+    }
 
     // registering the service worker
     navigator.serviceWorker.register('/sw.js').then(reg => {
@@ -36,24 +36,23 @@ self.addEventListener("load", () => {
             return;
         }
 
-        console.log(`registration complete : ${reg}`);
+        console.log(`registration complete : ${reg.scope}`);
 
         if (reg.waiting) {
             console.log("waiting...");
             updateReady(reg.waiting);
-            console.log("wait ended!");
             return;
         }
       
         if (reg.installing) {
             console.log("installing...");
             trackInstalling(reg.installing);
-            console.log("installation complete!");
             return;
         }
     
         reg.addEventListener('updatefound', () => {
             trackInstalling(reg.installing);
+            alert("New version available. Click OK to get it");
         });
 
     }).catch(() => {

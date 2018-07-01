@@ -15,14 +15,15 @@ self.addEventListener("install", (event) => {
     event.waitUntil(
         caches.open(Cache_Name).then(cache => {
             console.log("Cache opened");
-            cache.addAll(URLsToCache); 
-            console.log("Static content added");
-            return;
+            cache.addAll(URLsToCache);
+            console.log("Added all static content");
+            return self.skipWaiting();
         })
     );
 }); 
- 
-self.addEventListener('activate', event => {
+  
+self.addEventListener("activate", event => {
+    console.log("Static content added");
     event.waitUntil(
         caches.keys().then( cacheNames => {
             return Promise.all(
@@ -67,11 +68,11 @@ self.addEventListener("fetch", (event) => {
         })
     );
 });  
- 
+
 // Handle the event where the service worker needs to update
 self.addEventListener('message', function(event) {  
     if (event.data.action === 'skipWaiting') {
-        console.log("Skipping");
+        alert("Skipping");
         self.skipWaiting();
     }
 });

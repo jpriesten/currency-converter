@@ -60,7 +60,7 @@ convert.addEventListener("click", ()=> {
 self.addEventListener('load', () => {
 
     window.addEventListener('offline', () => {
-        logError.innerHTML = `<h4>You are currently offline, go online to get the latest results</h4>`;
+        logError.innerHTML = `You are currently offline, go online to get the latest results`;
     });
 
     fromSelect.innerHTML = "" , toSelect.innerHTML = "";
