@@ -1,4 +1,4 @@
-const Cache_Name = 'currency-converter-v5';
+const Cache_Name = 'currency-converter-v4';
 const Cache_Conversion_Rate = 'conversion-rate';
 const All_Caches = [
     Cache_Name,
@@ -21,7 +21,7 @@ self.addEventListener("install", (event) => {
         })
     );
 }); 
-  
+
 self.addEventListener("activate", event => {
     console.log("Static content added");
     event.waitUntil(

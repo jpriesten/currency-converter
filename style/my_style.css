@@ -16,7 +16,8 @@
 body {
     font-family: 'Segoe UI', Tahoma, Helvetica, Sans-Serif;
     color: #000;
-    background: #efefef;
+    /* background: #efefef; */
+    background: url("../images/images1.jpg");
     line-height: 155%;
     padding: 5% 25%;
 }
